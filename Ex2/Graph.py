@@ -1,5 +1,8 @@
 import itertools
 import time
+import matplotlib.pyplot as plt
+import numpy
+import scipy
 
 
 # Creating edge class to help with implementation of the Graph class
@@ -91,18 +94,17 @@ class Graph:
 
 
 # find all connected graphs of size "size"
-def printAllConnectedGraphs(size):
+def findPossibleEdges(size, amount):
     """
-    driver function for createConnectedGraphs - prints the graphs and their count
-    :param size: the size of the graphs we want to create
-    :return: None
+    find all sets of "amount" possible edges (without duplicates) that contain last node of the graph,
+    for a graph of size "size"
+    :param size: size of the graph
+    :param amount: amount of edges to find
+    :return: list of sets of edges (each set is a list of edges of size "amount")
     """
-    graphs = createConnectedGraphs(size)
-    print(f"Size = {size}")
-    print(f"Count = {len(graphs)}")
-    for idx, graph in enumerate(graphs):
-        print(f"#{idx + 1}")
-        print(graph)
+    nodes = [i for i in range(1, size + 1)]
+    edges = list(itertools.permutations(nodes, 2))
+    return list(itertools.combinations([Edge(edge[0], edge[1]) for edge in edges if size in edge], amount))
 
 
 def createConnectedGraphs(size):
@@ -140,25 +142,45 @@ def createConnectedGraphs(size):
     return final_graphs
 
 
-def findPossibleEdges(size, amount):
+def printAllConnectedGraphs(size):
     """
-    find all sets of "amount" possible edges (without duplicates) that contain last node of the graph,
-    for a graph of size "size"
-    :param size: size of the graph
-    :param amount: amount of edges to find
-    :return: list of sets of edges (each set is a list of edges of size "amount")
+    driver function for createConnectedGraphs - prints the graphs and their count
+    :param size: the size of the graphs we want to create
+    :return: None
     """
-    nodes = [i for i in range(1, size + 1)]
-    edges = list(itertools.permutations(nodes, 2))
-    return list(itertools.combinations([Edge(edge[0], edge[1]) for edge in edges if size in edge], amount))
+    if size < 1:
+        print("Invalid size - must 1 or greater")
+    graphs = createConnectedGraphs(size)
+    print(f"Size = {size}")
+    print(f"Count = {len(graphs)}")
+    for idx, graph in enumerate(graphs):
+        print(f"#{idx + 1}")
+        print(graph)
+
+
+def plotExecutionTimes(times):
+    # plot the data
+    x = numpy.array(range(1, len(times) + 1))
+    y = numpy.array(times)
+    plt.scatter(x, y, label='Times', color='blue')
+    plt.xlabel('Time')
+    plt.ylabel('Size')
+    plt.title('Execution times')
+    popt = scipy.optimize.curve_fit(lambda t, a, b: a * numpy.exp(b * t) - 1, x, y, p0=(4, 0.1))
+    plt.plot(x, popt[0][0] * numpy.exp(popt[0][1] * x), label='fit: %.5f*e^( %.5ft)' % tuple(popt[0]), color='red')
+    plt.legend()
+    plt.show()
 
 
 def main():
-    times = []
-    for size in range(1, 4):
+    times = []  # [1, 2.718, 7.389, 20.086]
+    for size in range(1, 6):
         start_time = time.time()
         printAllConnectedGraphs(size)
-        times.append(time.time() - start_time)
+        times.append(float("{:.5f}".format(time.time() - start_time)))
+
+    # plot the times
+    plotExecutionTimes(times)
 
 
 if __name__ == '__main__':
