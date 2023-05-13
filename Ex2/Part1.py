@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import numpy
 import scipy
+
 from GraphClasses import Graph, Edge
 
 
@@ -63,6 +64,7 @@ def printAllConnectedGraphs(size):
     """
     if size < 1:
         print("Invalid size - must 1 or greater")
+
     graphs = createConnectedGraphs(size)
     print(f"Size = {size}")
     print(f"Count = {len(graphs)}")

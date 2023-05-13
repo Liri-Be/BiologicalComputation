@@ -43,7 +43,9 @@ class Graph:
         """
         if len(self.nodes) != len(other.get_nodes()) or len(self.edges) != len(other.get_edges()):  # different size
             return False
-        for permutation in other.permute_graph():  # check all the permutations of the other graph
+
+        permutations = other.permute_graph()
+        for permutation in permutations:  # check all the permutations of the other graph
             flag = True
             for node in self.nodes:
                 if node not in permutation.get_nodes():
