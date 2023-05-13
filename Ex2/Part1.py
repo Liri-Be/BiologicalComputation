@@ -64,6 +64,7 @@ def printAllConnectedGraphs(size):
     """
     if size < 1:
         print("Invalid size - must 1 or greater")
+        return
 
     graphs = createConnectedGraphs(size)
     print(f"Size = {size}")

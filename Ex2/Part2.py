@@ -36,6 +36,10 @@ def findAllMotifs(graph, motif_size):
     :return: list of all the motifs of size "motif_size" in the graph, and their count
     """
     possible_motifs = createConnectedGraphs(motif_size)  # all the possible motifs of size "motif_size"
+
+    if len(graph.get_nodes()) < motif_size:  # if our graph is smaller than the motif size
+        return [(motif, 0) for motif in possible_motifs] + [(None, 0)]
+
     graph_motifs = []
     motifs_count = 0
     for motif in possible_motifs:
@@ -43,7 +47,7 @@ def findAllMotifs(graph, motif_size):
         graph_motifs.append((motif, count))
         motifs_count += count
 
-    graph_motifs.append(motifs_count)
+    graph_motifs.append((None, motifs_count))
     return graph_motifs
 
 
@@ -58,9 +62,10 @@ def printAllMotifs(graph, motif_size):
     """
     if motif_size < 1:
         print("Invalid size - must 1 or greater")
+        return
 
     motifs = findAllMotifs(graph, motif_size)
-    motifs_count = motifs.pop(-1)
+    _, motifs_count = motifs.pop(-1)
     print(f"Motif size = {motif_size}")
     print(f"Overall motifs = {motifs_count}")
     for idx, motif in enumerate(motifs):
@@ -73,10 +78,10 @@ def main():
     graph = Graph()
     for i in range(3):
         graph.add_node(i + 1)
-    edges = [(1, 2), (2, 3), (3, 1)]
+    edges = [(1, 2), (2, 3)]
     for edge in edges:
         graph.add_edge(Edge(*edge))
-    printAllMotifs(graph, 3)
+    printAllMotifs(graph, 4)
 
 
 if __name__ == '__main__':
