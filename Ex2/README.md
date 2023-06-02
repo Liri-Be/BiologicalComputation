@@ -2,7 +2,8 @@
 ## Intro.
 ### Part 1 - find all motifs of a specific size 
 In this part we wanted to find all motifs of a specific size.    
-Done by using recursive method which constract the motifs of size = n according to the motifs of size = (n-1), where in size = 1, the only motif is graph with one node and no edges.
+Done by using recursive method which construct the motifs of size = n according to the motifs of size = (n-1), where in size = 1, the only motif is graph with one node and no edges.   
+Prints all the motifs in the end, but can also save them to a file.
 ### Part 2 - count motifs of a specific size in a graph
 In this part we wanted count motifs of a specific size in a graph.   
 Done by finding all the motifs of said size, and count how many times each appear in said graph.
@@ -12,6 +13,9 @@ Done by finding all the motifs of said size, and count how many times each appea
 Contains all the classes that are related to the graphs (Edge class and Graph class).
 ### Part*.py (1/2)
 Contains all the methods that are related to part* (1/2).
+### plotTimes.py
+Contains all the methods that are related to plotting the times of the algorithms.   
+Used for time complexity analysis of the algorithms of part 1 for the report.
 
 ## How to run?
 There are a few steps -
@@ -25,4 +29,5 @@ There are a few steps -
     ```
     python[3] Part*.py 
     ```
-    write 3 if you are using linux, else only python.
+    write 3 if you are using linux, else only python.   
+*Note: you can also open the code in your favorite IDE and run it from there :smiley:
