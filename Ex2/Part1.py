@@ -1,8 +1,5 @@
 import itertools
 import time
-import matplotlib.pyplot as plt
-import numpy
-import scipy
 
 from GraphClasses import Graph, Edge
 
@@ -56,10 +53,13 @@ def createConnectedGraphs(size):
     return final_graphs
 
 
-def printAllConnectedGraphs(size):
+def printAllConnectedGraphs(size, file_name=None):
     """
     driver function for createConnectedGraphs - prints the graphs and their count
     :param size: the size of the graphs we want to create
+    :type size: int
+    :param file_name: if not None, the function will also write the graphs to a file with the given name
+    :type file_name: str
     :return: None
     """
     if size < 1:
@@ -67,36 +67,27 @@ def printAllConnectedGraphs(size):
         return
 
     graphs = createConnectedGraphs(size)
-    print(f"Size = {size}")
-    print(f"Count = {len(graphs)}")
+    data_str = ""
+    data_str += f"Size = {size}\n"
+    data_str += f"Count = {len(graphs)}\n"
     for idx, graph in enumerate(graphs):
-        print(f"#{idx + 1}")
-        print(graph)
-
-
-def plotExecutionTimes(times):
-    # plot the data
-    x = numpy.array(range(1, len(times) + 1))
-    y = numpy.array(times)
-    plt.scatter(x, y, label='Times', color='blue')
-    plt.xlabel('Time')
-    plt.ylabel('Size')
-    plt.title('Execution times')
-    popt = scipy.optimize.curve_fit(lambda t, a, b: a * numpy.exp(b * t) - 1, x, y, p0=(4, 0.1))
-    plt.plot(x, popt[0][0] * numpy.exp(popt[0][1] * x), label='fit: %.5f*e^( %.5ft)' % tuple(popt[0]), color='red')
-    plt.legend()
-    plt.show()
+        data_str += f"#{idx + 1}\n"
+        data_str += str(graph)
+    if file_name is not None:
+        with open(file_name, "a") as file:
+            file.write(data_str)
+    print(data_str)
 
 
 def main():
     times = []
+    file_name = f"./graphs.txt"
     for size in range(1, 5):
         start_time = time.time()
-        printAllConnectedGraphs(size)
+        printAllConnectedGraphs(size, file_name=file_name)
         times.append(float("{:.5f}".format(time.time() - start_time)))
-
-    # plot the times
-    plotExecutionTimes(times)
+        with open(file_name, "a") as file:
+            file.write(f"Execution time: {times[-1]} seconds\n")
 
 
 if __name__ == '__main__':

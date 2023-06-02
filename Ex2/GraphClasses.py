@@ -74,6 +74,13 @@ class Graph:
 
         return permutations
 
+    def is_connected(self):
+        visited = [False for _ in range(len(self.nodes))]
+        for edge in self.edges:
+            visited[edge.get_source() - 1] = True
+            visited[edge.get_target() - 1] = True
+        return all(visited)
+
     # add nodes and edges
     def add_node(self, node):
         if node not in self.nodes:
