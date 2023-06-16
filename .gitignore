@@ -1,2 +1,5 @@
 .idea
 __pycache__
+*.png
+graphs*.txt
+Ex2/test.py

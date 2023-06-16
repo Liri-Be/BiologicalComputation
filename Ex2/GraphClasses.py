@@ -13,6 +13,9 @@ class Edge:
     def __eq__(self, other):  # check if two edges are equal
         return (self.source, self.target) == (other.get_source(), other.get_target())
 
+    def __hash__(self):
+        return hash((self.source, self.target))
+
     # getters
     def get_source(self):
         return self.source
@@ -23,9 +26,20 @@ class Edge:
 
 # Graph class for each of our sub-graphs :)
 class Graph:
-    def __init__(self):
-        self.nodes = []
-        self.edges = []
+    def __init__(self, edges=None, size=None):
+        if edges is None or size is None:
+            self.nodes = []
+            self.edges = []
+        elif size is not None and edges is None:
+            self.nodes = [i for i in range(1, size + 1)]
+            self.edges = []
+        else:
+            self.nodes = [i for i in range(1, size + 1)]
+            self.edges = []
+            for source, target in edges:
+                self.add_edge(Edge(source, target))
+        # self.edges = []
+        # self.nodes = []
 
     def __repr__(self):  # "toString"
         str_graph = ""
@@ -63,7 +77,7 @@ class Graph:
         :return: list of all the permutations of our graph
         """
         permutations = []
-        for permutation in itertools.permutations(self.nodes, len(self.nodes)):
+        for permutation in list(itertools.permutations(self.nodes, len(self.nodes))):
             new_graph = Graph()
             new_graph.nodes = list(permutation)
             # fix the edges according to the permutation
@@ -76,10 +90,17 @@ class Graph:
 
     def is_connected(self):
         visited = [False for _ in range(len(self.nodes))]
-        for edge in self.edges:
-            visited[edge.get_source() - 1] = True
-            visited[edge.get_target() - 1] = True
+        node = self.nodes[0]
+        self.dfs(node, visited)
         return all(visited)
+
+    def dfs(self, node, visited):
+        visited[node - 1] = True
+        for edge in self.edges:
+            if edge.get_source() == node and not visited[edge.get_target() - 1]:
+                self.dfs(edge.get_target(), visited)
+            elif edge.get_target() == node and not visited[edge.get_source() - 1]:
+                self.dfs(edge.get_source(), visited)
 
     # add nodes and edges
     def add_node(self, node):

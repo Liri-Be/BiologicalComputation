@@ -1,7 +1,7 @@
 from math import factorial
 
 from GraphClasses import Graph, Edge
-from Part1 import createConnectedGraphs
+from Part1 import findNonIsoConnectedGraphs
 
 
 def countAppearances(graph, subgraph):
@@ -35,7 +35,7 @@ def findAllMotifs(graph, motif_size):
     :type motif_size: int
     :return: list of all the motifs of size "motif_size" in the graph, and their count
     """
-    possible_motifs = createConnectedGraphs(motif_size)  # all the possible motifs of size "motif_size"
+    possible_motifs = findNonIsoConnectedGraphs(motif_size)  # all the possible motifs of size "motif_size"
 
     if len(graph.get_nodes()) < motif_size:  # if our graph is smaller than the motif size
         return [(motif, 0) for motif in possible_motifs] + [(None, 0)]
@@ -81,7 +81,7 @@ def main():
     edges = [(1, 2), (2, 3)]
     for edge in edges:
         graph.add_edge(Edge(*edge))
-    printAllMotifs(graph, 4)
+    printAllMotifs(graph, 2)
 
 
 if __name__ == '__main__':
